@@ -1,0 +1,22 @@
+#include<stdio.h>
+
+void maze_generator(int height,int width);
+
+int main(){
+    int height,width;
+    printf("Enter the height of maze: ");
+    scanf("%d",&height);
+    printf("Enter the width of maze: ");
+    scanf("%d",&width);
+    maze_generator(height,width);
+    return 0;
+}
+
+void maze_generator(int height,int width){
+    for(int i=0;i<height;i++){
+        for(int j=0;j<width;j++){
+            printf("* ");
+        }
+        printf("\n");
+    }
+}
