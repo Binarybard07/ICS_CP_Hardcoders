@@ -1,0 +1,34 @@
+#include <stdio.h>
+#include <windows.h>
+#include <stdbool.h>
+
+struct cell_data{
+    
+    char cell_char;
+    bool cell_visited;
+    bool is_wall;
+
+};
+
+int main(){
+
+    int height,width;
+
+    printf("Enter Height of the maze: ");
+    scanf("%d",&height);
+
+    printf("Enter Width of the maze: ");
+    scanf("%d",&width);
+
+    struct cell_data cells[height*width];
+
+    for(int i=0;i<height;i++){
+        for(int j=0;j<width;j++){
+            cells[i].cell_char='*';
+            printf("%c ",cells[i].cell_char);
+            Sleep(50);
+        }
+        printf("\n");
+    }
+    return 0;
+}
