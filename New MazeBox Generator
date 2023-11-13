@@ -1,18 +1,28 @@
 #include <stdio.h>
-#include <windows.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <time.h>
+#include <windows.h>
 
 struct cell_data{
     
     char cell_char;
+    int x,y,cell_num;
     bool cell_visited;
     bool is_wall;
 
 };
 
+int random_number(){
+    int random;
+    random=rand()%2;
+    return random;
+}
+
 int main(){
 
-    int height,width;
+    srand(time(NULL)*random_number()+random_number()*3);
+    int height,width,k=0;
 
     printf("Enter Height of the maze: ");
     scanf("%d",&height);
@@ -20,13 +30,27 @@ int main(){
     printf("Enter Width of the maze: ");
     scanf("%d",&width);
 
-    struct cell_data cells[height*width];
+    printf("\n");
 
+    struct cell_data cell[height*width];
+
+    for(int k=0;k<height*width;k++){
+        cell[k].cell_num=k+1;
+        cell[k].is_wall=random_number();
+    }
     for(int i=0;i<height;i++){
         for(int j=0;j<width;j++){
-            cells[i].cell_char='*';
-            printf("%c ",cells[i].cell_char);
-            Sleep(50);
+            cell[k].x=j;
+            cell[k].y=i;
+            if(cell[k].is_wall || cell[k].x==0 || cell[k].x==width-1 || cell[k].y==0 || cell[k].y==height-1){
+                cell[k].cell_char='*';
+            }
+            else{
+                cell[k].cell_char=' ';
+            }
+            printf("%c ",cell[k].cell_char);
+            Sleep(10);
+            k++;
         }
         printf("\n");
     }
