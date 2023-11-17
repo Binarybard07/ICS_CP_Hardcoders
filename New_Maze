@@ -44,7 +44,7 @@ void update_maze(int height,int width,struct cell_data *ptr_cell){
 
 bool valid_cell(int index,int height,int width){
     
-    if(index>-1 && index<height*width){
+    if(index>-1 && index<(height*width)){
         printf("Valid Cell\n");
         return true;
     }
@@ -68,32 +68,37 @@ void print_maze(struct cell_data *ptr_cell,int height,int width){
     printf("\n");
 }
 
-void neighbour_cell_data(struct cell_data *ptr_current_cell,struct cell_data *ptr_cell,int height,int width,struct cell_data *ptr_neighbour){
-    
+void neighbour_cell_data(struct cell_data *ptr_current_cell,struct cell_data *ptr_cell,int height,int width,struct cell_data *ptr_neighbour){ 
     printf("Neighbour cell\n");
-    if(valid_cell(ptr_current_cell->index-width,height,width) && !ptr_cell[ptr_current_cell->index-width].is_obstacle){
+    printf("This %d",ptr_current_cell->index);
+    if(ptr_cell[(ptr_current_cell->index)-width].is_obstacle==true && valid_cell((ptr_current_cell->index)-width,height,width)==true){
         ptr_neighbour[0]=ptr_cell[ptr_current_cell->index-width];
+        ptr_neighbour[0].can_be_visited=true;
+        printf("Neighbour cell00000\n");
     }
     else{
         ptr_neighbour[0].can_be_visited=false;
     }
 
-    if(valid_cell(ptr_current_cell->index+1,height,width) && !ptr_cell[ptr_current_cell->index+1].is_obstacle){
+    if(ptr_cell[ptr_current_cell->index+1].is_obstacle==false){
         ptr_neighbour[1]=ptr_cell[ptr_current_cell->index+1];
+        ptr_neighbour[1].can_be_visited=true;
     }
     else{
         ptr_neighbour[1].can_be_visited=false;
     }
 
-    if(valid_cell(ptr_current_cell->index+width,height,width) && !ptr_cell[ptr_current_cell->index+width].is_obstacle){
+    if(ptr_cell[ptr_current_cell->index+width].is_obstacle==false){
         ptr_neighbour[2]=ptr_cell[ptr_current_cell->index+width];
+        ptr_neighbour[2].can_be_visited=true;
     }
     else{
         ptr_neighbour[2].can_be_visited=false;
     }    
     
-    if(valid_cell(ptr_current_cell->index-1,height,width) && !ptr_cell[ptr_current_cell->index-1].is_obstacle){
+    if(ptr_cell[ptr_current_cell->index-1].is_obstacle==false){
         ptr_neighbour[3]=ptr_cell[ptr_current_cell->index-1];
+        ptr_neighbour[3].can_be_visited=true;
     }
     else{
         ptr_neighbour[3].can_be_visited=false;
@@ -101,8 +106,17 @@ void neighbour_cell_data(struct cell_data *ptr_current_cell,struct cell_data *pt
 
 }
 
-void dfs(struct cell_data *ptr_current_cell, struct cell_data *ptr_cell,struct cell_data *ptr_neighbour) {
-    
+void dfs(struct cell_data *ptr_current_cell, struct cell_data *ptr_cell,int height,int width,struct cell_data *ptr_neighbour) {
+    neighbour_cell_data(ptr_current_cell,ptr_cell,height,width,ptr_neighbour);
+    for(int i=0;i<4;i++){
+        if(ptr_neighbour[i].can_be_visited){
+            ptr_current_cell->is_visited=true;
+            ptr_current_cell->is_obstacle=false;
+            *ptr_current_cell=ptr_neighbour[i];
+            update_maze(height,width,ptr_cell);
+            dfs(ptr_current_cell,ptr_cell,height,width,ptr_neighbour);
+        }
+    }
 }
 
 int main(){
@@ -117,10 +131,6 @@ int main(){
     printf("\n");
 
     struct cell_data cell[height*width];
-    current_cell=cell[((height*width)-1)-(width*2)+2];
-    ptr_cell=&cell[0];
-    ptr_current_cell=&current_cell;
-    ptr_neighbour=&neighbour[0];
 
     for(int i=0;i<height;i++){
         for(int j=0;j<width;j++){
@@ -133,8 +143,12 @@ int main(){
         }
     }
 
-    neighbour_cell_data(ptr_current_cell,ptr_cell,height,width,ptr_neighbour);
-    dfs(ptr_current_cell,ptr_cell,ptr_neighbour);
+    current_cell=cell[((height*width)-1)-(width*2)+2];
+    ptr_cell=&cell[0];
+    ptr_current_cell=&current_cell;
+    ptr_neighbour=&neighbour[0];
+
+    dfs(ptr_current_cell,ptr_cell,height,width,ptr_neighbour);
     update_maze(height,width,ptr_cell);
     print_maze(ptr_cell,height,width);
 
