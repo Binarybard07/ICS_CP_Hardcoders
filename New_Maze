@@ -27,6 +27,10 @@ void update_maze(int height,int width,struct cell_data *ptr_cell){
             else{
                 ptr_cell[c].cell_char=' ';   
             }
+            if(ptr_cell[c].x==0 || ptr_cell[c].x==width-1 || ptr_cell[c].y==0 || ptr_cell[c].y==height-1){
+                ptr_cell[c].is_obstacle=true;
+                ptr_cell[c].can_be_visited=false;
+            }
             if(ptr_cell[c].x==0 && ptr_cell[c].y==height-2){
                 ptr_cell[c].cell_char='S';
             }
@@ -125,10 +129,6 @@ int main(){
             cell[k].y=i;
             cell[k].is_obstacle=true;
             cell[k].is_visited=false;
-            if(ptr_cell[k].x==0 || ptr_cell[k].x==width-1 || ptr_cell[k].y==0 || ptr_cell[k].y==height-1){
-                ptr_cell[k].is_obstacle=true;
-                ptr_cell[k].can_be_visited=false;
-            }
             k++;
         }
     }
