@@ -10,6 +10,7 @@ struct cell_data{
     int index,num;
     char cell_char;
     bool is_obstacle;
+    bool is_wall;
     bool can_be_visited;
     bool is_visited;
 
@@ -21,13 +22,13 @@ void update_maze(int height,int width,struct cell_data *ptr_cell){
     int c=0;
     for(int i=0;i<height;i++){
         for(int j=0;j<width;j++){
-            if(ptr_cell[c].is_obstacle){
+            if(ptr_cell[c].is_obstacle==true || ptr_cell[c].is_wall==true){
                 ptr_cell[c].cell_char='*';
             }
             else{
                 ptr_cell[c].cell_char=' ';   
             }
-            if(ptr_cell[c].x==0 || ptr_cell[c].x==width-1 || ptr_cell[c].y==0 || ptr_cell[c].y==height-1){
+            if(ptr_cell[c].is_wall==true){
                 ptr_cell[c].is_obstacle=true;
                 ptr_cell[c].can_be_visited=false;
             }
@@ -71,7 +72,7 @@ void print_maze(struct cell_data *ptr_cell,int height,int width){
 void neighbour_cell_data(struct cell_data *ptr_current_cell,struct cell_data *ptr_cell,int height,int width,struct cell_data *ptr_neighbour){ 
     printf("Neighbour cell\n");
     printf("This %d",ptr_current_cell->index);
-    if(ptr_cell[(ptr_current_cell->index)-width].is_obstacle==true && valid_cell((ptr_current_cell->index)-width,height,width)==true){
+    if(ptr_cell[(ptr_current_cell->index)-width].is_wall==false && valid_cell((ptr_current_cell->index)-width,height,width)==true){
         ptr_neighbour[0]=ptr_cell[ptr_current_cell->index-width];
         ptr_neighbour[0].can_be_visited=true;
         printf("Neighbour cell00000\n");
@@ -80,7 +81,7 @@ void neighbour_cell_data(struct cell_data *ptr_current_cell,struct cell_data *pt
         ptr_neighbour[0].can_be_visited=false;
     }
 
-    if(ptr_cell[ptr_current_cell->index+1].is_obstacle==false){
+    if(ptr_cell[ptr_current_cell->index+1].is_wall==false && valid_cell((ptr_current_cell->index)-width,height,width)==true){
         ptr_neighbour[1]=ptr_cell[ptr_current_cell->index+1];
         ptr_neighbour[1].can_be_visited=true;
     }
@@ -88,7 +89,7 @@ void neighbour_cell_data(struct cell_data *ptr_current_cell,struct cell_data *pt
         ptr_neighbour[1].can_be_visited=false;
     }
 
-    if(ptr_cell[ptr_current_cell->index+width].is_obstacle==false){
+    if(ptr_cell[ptr_current_cell->index+width].is_wall==false && valid_cell((ptr_current_cell->index)-width,height,width)==true){
         ptr_neighbour[2]=ptr_cell[ptr_current_cell->index+width];
         ptr_neighbour[2].can_be_visited=true;
     }
@@ -96,7 +97,7 @@ void neighbour_cell_data(struct cell_data *ptr_current_cell,struct cell_data *pt
         ptr_neighbour[2].can_be_visited=false;
     }    
     
-    if(ptr_cell[ptr_current_cell->index-1].is_obstacle==false){
+    if(ptr_cell[ptr_current_cell->index-1].is_wall==false && valid_cell((ptr_current_cell->index)-width,height,width)==true){
         ptr_neighbour[3]=ptr_cell[ptr_current_cell->index-1];
         ptr_neighbour[3].can_be_visited=true;
     }
@@ -139,6 +140,10 @@ int main(){
             cell[k].y=i;
             cell[k].is_obstacle=true;
             cell[k].is_visited=false;
+            cell[k].is_wall=false;
+            if(ptr_cell[k].x==0 || ptr_cell[k].x==width-1 || ptr_cell[k].y==0 || ptr_cell[k].y==height-1){
+                cell[k].is_wall=true;
+            }
             k++;
         }
     }
