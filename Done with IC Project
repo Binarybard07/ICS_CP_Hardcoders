@@ -180,8 +180,8 @@ void Maze_Generate(int size,char maze[size][size], char travelled[size][size]){
     
     maze[size-2][size-2] = 'E';
 
-    printf(" Please wait while your maze is generating (%d %%)\n\n",(loading/(size*size))*100);
-
+    waiting(" Please wait while your maze is generating");
+    printf("\n\n");
     
     for(int n = 0; n<size; n++)
     {
@@ -302,7 +302,7 @@ void Update_Loading(int loading, int totalCells){
 
     printf("\033[s");
     printf("\033[3;45H");
-    printf("\rMaze Completion (%.2f %%)                        ", (loading / (float)totalCells) * 100);
+    printf("\rMaze Completion (%.2f %%)                        \n\n", (loading / (float)totalCells) * 100);
     // if((loading / (float)totalCells) * 100==100.00){
     //     printf("\033[3;H");
     //     printf("Maze generated successfully!                                                ");
@@ -315,6 +315,7 @@ void Update_Loading(int loading, int totalCells){
 
 void displayMaze(int size, char maze[size][size], int x_coordinate, int y_coordinate) {
     Clear_Console();
+    printf("\n\n\n");
     if(maze[x_coordinate][y_coordinate]=='E'){
         for (int n = 0; n < size; n++) {
             space(50);
@@ -340,8 +341,12 @@ void displayMaze(int size, char maze[size][size], int x_coordinate, int y_coordi
                     }
                     else{
                         if(maze[n][k]=='*'){
-                            
-                            printf("%c ",254);
+                            if(n==size-2 && k==size-1){
+                                printf("\033[1;32m%c \033[0m",254);
+                            }
+                            else{
+                                printf("%c ",254);
+                            }
                         }
                         else{
                             
@@ -379,8 +384,17 @@ void displayMaze(int size, char maze[size][size], int x_coordinate, int y_coordi
                 else{
 
                     if(maze[n][k]=='*'){
-                        
-                        printf("%c ",254);
+                        if(n==size-2 && k==size-1 || n==1 && k==0){
+                            if(n==1 && k==0){
+                                printf("\033[33m%c \033[0m",254);
+                            }
+                            else{
+                                printf("\033[32m%c \033[0m",254);
+                            }
+                        }
+                        else{
+                            printf("%c ",254);
+                        }
                     }
 
                     else{
