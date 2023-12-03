@@ -591,7 +591,7 @@ if(b==0){
     printf("\t");
     printf("\t");
     printf("\tOur Team\n");
-    printf("\t1) Jenish Thakkar\n \t2) Rudra Thakar\n \t3) Sahilpreet Singh\n \t4) Ameen: \n");
+    printf("\t1) Jenish Thakkar\n \t2) Rudra Thakar\n \t3) Sahilpreet Singh\n \t4) Ameen \n");
     printf("\n");
     printf("Enter 0 the return to menu ");
     scanf("%d", &c);
